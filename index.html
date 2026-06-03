@@ -87,6 +87,13 @@
     </section>
   </main>
 
+  <script src="https://cdn.trackjs.com/agent/v3/latest/t.js"></script>
+  <script>
+    window.TrackJS && TrackJS.install({ 
+      token: "7ff6982eb25a426bae136563656f03d0"
+      // for more configuration options, see https://docs.trackjs.com
+    });
+  </script>
   <script>
     let form = document.querySelector('form');
     form.addEventListener('submit', e => {
@@ -99,9 +106,97 @@
     });
 
     let errorBtns = Array.from(document.querySelectorAll('#error-btns > button'));
-
     // Start your code here
     // You may move this JS to another file if you wish
+    errorBtns[0].addEventListener('click', () => console.log('Console log message'));
+    errorBtns[1].addEventListener('click', () => console.error('Console error message'));
+    errorBtns[2].addEventListener('click', () => {console.count('Counter')});
+    errorBtns[3].addEventListener('click', () => console.warn('Console warning message'));
+    errorBtns[4].addEventListener('click', () => console.assert(1 === 2, 'Console assert message'));
+    errorBtns[5].addEventListener('click', () => console.clear());
+    errorBtns[6].addEventListener('click', () => console.dir(document.body));
+    errorBtns[7].addEventListener('click', () => console.dirxml(document));
+    errorBtns[8].addEventListener('click', () => console.group('Group Started'));
+    errorBtns[9].addEventListener('click', () => console.groupEnd('Group Ended'));
+    errorBtns[10].addEventListener('click', () => console.table([{ name: 'Nathan', age: 20 }, { name: 'Nintendo Switch 2', age: 1 }]));
+    errorBtns[11].addEventListener('click', () => console.time('Timer Started'));
+    errorBtns[12].addEventListener('click', () => console.timeEnd('Timer Started'));
+    errorBtns[13].addEventListener('click', () => console.trace('Console trace'));
+    errorBtns[14].addEventListener('click', () => {
+      try {
+        throw new Error('This is a global error');
+      } catch (error) {
+        console.log('Global Error Message Caught');
+      }
+    });
+
+    //Trying out Try/Catch
+    try {
+      notImplementedFunction();
+    } catch (error) {
+      console.error('Caught error:', error);
+    } finally {
+      console.log('First Try/Catch block complete, if I did this right, there should be an error that was caught');
+    }
+
+    try {
+      console.log('Success');
+    } catch (error) {
+      console.error('Caught error:', error);
+    } finally {
+      console.log('Second Try/Catch block complete, there should be no error caught');
+    }
+
+    class validationError extends Error {
+      constructor(message) {
+        super(message);
+        this.name = 'ValidationError';
+      }
+    }
+
+    function checkProduct(json) {
+      let product = JSON.parse(json);
+      if (!product.name) {
+        throw new validationError('No name provided');
+      }
+      if (product.price <= 0) {
+        throw new validationError('Invalid price');
+      }
+      if (!product.description) {
+        throw new validationError('No description provided');
+      }
+      if (!product.available) {
+        throw new validationError('No availability provided');
+      }
+      
+      return product;
+    }
+
+    try {
+      let product = checkProduct('{"name": "Canned Bread", "price": 6.99, "description": "Literally just bread in a can.", "available": true}');
+      console.log('Product is valid:', product);
+    } catch (error) {
+      if (error instanceof validationError) {
+        console.error('Validation error:', error.message);
+      } else {
+        console.error('Unexpected error:', error);
+      }
+    } finally {
+      console.log('Product validation complete');
+    }
+
+    try {
+      let product = checkProduct('{"name": "Canned Water", "price": -2.99, "description": "Literally just water in a can.", "available": true}');
+      console.log('Product is valid:', product);
+    } catch (error) {
+      if (error instanceof validationError) {
+        console.error('Validation error:', error.message);
+      } else {
+        console.error('Unexpected error:', error);
+      }
+    } finally {
+      console.log('Product validation complete');
+    }
   </script>
 </body>
 
